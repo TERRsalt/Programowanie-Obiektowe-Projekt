@@ -1,0 +1,12 @@
+@startuml
+
+'todo ' Zrobić diagram ULM '
+
+' Tymczasowa klasa, do usunięcia później '
+class Klasa {
+    - var: int
+
+    + Klasa(int)
+}
+
+@enduml
