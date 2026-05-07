@@ -1,12 +1,163 @@
 @startuml
 
-'todo ' Zrobić diagram ULM '
+skinparam linetype ortho
+skinparam nodesep 150
+skinparam ranksep 120
+skinparam classAttributeIconSize 0
 
-' Tymczasowa klasa, do usunięcia później '
-class Klasa {
-    - var: int
+package "Infrastruktura" #E8E8E8 {
+    class SystemObslugi {
+        - menu: List<Produkt>
+        - historiaZamowien: List<Zamowienie>
 
-    + Klasa(int)
+        + SystemObslugi(List<Produkt>, List<Zamowienie>)
+
+        + WyswietlMenu(): void
+        + WyszukajDanie(string): Produkt
+        + DodajNoweZamowienie(Zamowienie): void
+        + ZmienStatusZamowienia(int, StatusZamowienia): void
+    }
+
+    class ZarzadcaPlikow {
+        - sciezkaMenu: string
+        - sciezkaZamowien: string
+
+        + ZarzadcaPlikow(string, string)
+
+        + ZapiszDane(SystemObslugi): void
+        + WczytajDane(): SystemObslugi
+    }
 }
+
+package "Zamowienia" #fceeb2 {
+    abstract class Zamowienie {
+        # klient: string
+        # pozycje: List<PozycjaZamowienia>
+        # czasZamowienia: DateTime
+        # idZamowienia: int
+        # status: StatusZamowienia
+        # promocja: Promocja
+        # platnosc: Platnosc
+
+        + Zamowienie(string, List<PozycjaZamowienia>, DateTime, int, StatusZamowienia, Promocja, Platnosc)
+
+        + {abstract} Realizuj(): void
+        + DodajProdukt(Produkt, int): void
+        + UsunProdukt(Produkt): void
+        + ObliczCenaBazowa(): double
+        + ObliczCeneFinalna(): double
+        + Oplac(typ: TypPlatnosci): void
+    }
+
+    class ZamowienieDostawa {
+        - adres: string
+        - kosztDostawy: double
+
+        + ZamowienieDostawa(string, List<PozycjaZamowienia>, DateTime, int, StatusZamowienia, Promocja, Platnosc, adres, double)
+
+        + Realizuj(): void
+    }
+
+    class ZamowienieLokal {
+        - numerStolika: int
+
+        + ZamowienieLokal(string, List<PozycjaZamowienia>, DateTime, int, StatusZamowienia, Promocja, Platnosc, int)
+
+        + Realizuj(): void
+    }
+
+    enum StatusZamowienia {
+        ZLOZONE
+        W_TRAKCIE_REALIZACJI
+        GOTOWE
+        DOSTARCZONE
+    }
+
+    Zamowienie <|-- ZamowienieDostawa
+    Zamowienie <|-- ZamowienieLokal
+}
+
+package "Platnosci" #beffbe {
+    class Platnosc {
+        - kwota: double
+        - typ: TypPlatnosci
+        - czyOplacona: bool
+
+        + Platnosc(double, TypPlatnosci, bool)
+
+        + Zaksieguj(): void
+    }
+
+    class Promocja {
+        - nazwa: string
+        - typ: TypPromocji
+        - wartoscRabatu: double
+
+        + Promocja(string, TypPromocji, double)
+
+        + ObliczZnizke(Zamowienie): double
+        - SprawdzWarunkiZestawu(Zamowienie): bool
+    }
+
+    enum TypPlatnosci {
+        KARTA
+        GOTOWKA
+        BLIK
+    }
+
+    enum TypPromocji {
+        BRAK
+        ZESTAW_LUNCHOWY
+        ZNIZKA_STUDENCKA
+    }
+
+    Platnosc -[hidden]down- TypPlatnosci
+    Promocja -[hidden]down- TypPromocji
+}
+
+package "Produkty" #e0f3ff {
+    class PozycjaZamowienia {
+        - produkt: Produkt
+        - ilosc: int
+        - cenaJednostkowa: double
+
+        + PozycjaZamowienia(Produkt, int)
+
+        + ObliczWartosc(): double
+    }
+
+    class Produkt {
+        - nazwa: string
+        - typDania: TypDania
+        - cena: double
+
+        + Produkt(string, TypDania, double)
+
+        + GetCena(): double
+        + GetTyp(): TypDania
+        + GetNazwa(): string
+    }
+
+    enum TypDania {
+        BURGER
+        PIZZA
+        FRYTKI
+        COLA
+    }
+}
+
+Zamowienia -[hidden]down- Platnosc
+
+Platnosc -up-* Zamowienie : opłacane przez
+Promocja -up-o Zamowienie : posiada
+
+SystemObslugi o-down- Zamowienie : przechowuje historię
+
+Zamowienie *--right- PozycjaZamowienia : składa się z
+PozycjaZamowienia o--down- Produkt : dotyczy
+
+SystemObslugi o---left- Produkt : zarządza (Menu)
+
+ZarzadcaPlikow .down.> SystemObslugi : serializuje dane
 
 @enduml
