@@ -5,7 +5,8 @@ using Platnosci;
 class ZamowienieLokal: Zamowienie {
     private int numerStolika;
 
-    public ZamowienieLokal(int idZamowienia, string klient, Platnosc platnosc, int numerStolika): base(idZamowienia, klient, platnosc) {
+    public ZamowienieLokal(int idZamowienia, StatusZamowienia status, string klient, Platnosc platnosc,
+        int numerStolika): base(idZamowienia, status, klient, platnosc) {
         this.numerStolika = numerStolika;
     }
 

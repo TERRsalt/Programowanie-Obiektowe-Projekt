@@ -11,16 +11,18 @@ abstract class Zamowienie {
     //protected List<PozycjaZamowienia> Pozycje = new List<PozycjaZamowienia>();
     protected DateTime czasZamowienia;
 
-    //protected StatusZamowienia status;
+    protected StatusZamowienia status;
 
     protected string klient;
     
     protected Platnosc platnosc;
     //protected Promocja promocja;
     
-    public Zamowienie(int idZamowienia, string klient, Platnosc platnosc) {
+    public Zamowienie(int idZamowienia, StatusZamowienia status, string klient, Platnosc platnosc) {
         this.idZamowienia = idZamowienia;
         this.czasZamowienia = DateTime.Now;
+
+        this.status = status;
 
         this.klient = klient;
 

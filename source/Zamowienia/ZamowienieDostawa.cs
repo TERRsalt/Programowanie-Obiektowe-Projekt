@@ -6,7 +6,8 @@ class ZamowienieDostawa: Zamowienie {
     private string adres;
     private double kosztDostawy;
     
-    public ZamowienieDostawa(int idZamowienia, string klient, Platnosc platnosc, string adres, double kosztDostawy): base(idZamowienia, klient, platnosc) {
+    public ZamowienieDostawa(int idZamowienia, StatusZamowienia status, string klient, Platnosc platnosc,
+        string adres, double kosztDostawy): base(idZamowienia, status, klient, platnosc) {
         this.adres = adres;
         this.kosztDostawy = kosztDostawy;
     }
