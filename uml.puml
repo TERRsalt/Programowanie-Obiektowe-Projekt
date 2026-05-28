@@ -31,20 +31,20 @@ package "Infrastruktura" #E8E8E8 {
 
 package "Zamowienia" #fceeb2 {
     abstract class Zamowienie {
-        # klient: string
+        # idZamowienia: int
         # pozycje: List<PozycjaZamowienia>
         # czasZamowienia: DateTime
-        # idZamowienia: int
         # status: StatusZamowienia
-        # promocja: Promocja
+        # klient: string
         # platnosc: Platnosc
+        # promocja: Promocja
 
         + Zamowienie(string, List<PozycjaZamowienia>, DateTime, int, StatusZamowienia, Promocja, Platnosc)
 
         + {abstract} Realizuj(): void
         + DodajProdukt(Produkt, int): void
-        + UsunProdukt(Produkt): void
-        + ObliczCenaBazowa(): double
+        + UsunProdukt(Produkt, int): void
+        + ObliczCeneBazowa(): double
         + ObliczCeneFinalna(): double
         + Oplac(typ: TypPlatnosci): void
     }

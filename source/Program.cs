@@ -5,18 +5,10 @@ using Zamowienia;
 
 class Program {
     static void Main() {
-        Console.WriteLine("Hello, World!\n");
+        ZamowienieDostawa zd = new ZamowienieDostawa(1, "Test", null, "Wierzbowa 14", 10);
+        zd.Realizuj();
 
-        Platnosc platnosc=new Platnosc();
-        platnosc.Test();
-
-        Produkt produkt=new Produkt();
-        produkt.Test();
-
-        Zamowienie zamowienie=new Zamowienie();
-        zamowienie.Test();
-
-        SystemObslugi systemObslugi=new SystemObslugi();
-        systemObslugi.Test();
+        ZamowienieLokal zl = new ZamowienieLokal(1, "Test", null, 3);
+        zl.Realizuj();
     }
 }
